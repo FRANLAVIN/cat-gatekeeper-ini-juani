@@ -1,0 +1,18 @@
+{
+  "name": "cat-gatekeeper-ini-juani",
+  "version": "0.2.0",
+  "private": true,
+  "author": "FRANLAVIN",
+  "description": "Portable macOS Cat Gatekeeper gift build with Iñi the Cat and Juani the Cat.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "smoke:ui": "CAT_GATEKEEPER_GIFT_SMOKE=ui electron .",
+    "smoke:ini": "CAT_GATEKEEPER_GIFT_SMOKE=overlay CAT_GATEKEEPER_GIFT_SMOKE_ANIMAL=blue_cat electron .",
+    "smoke:juani": "CAT_GATEKEEPER_GIFT_SMOKE=overlay CAT_GATEKEEPER_GIFT_SMOKE_ANIMAL=cat electron .",
+    "build:mac": "zsh script/build_macos_pack.sh"
+  },
+  "devDependencies": {
+    "electron": "^39.2.4"
+  }
+}

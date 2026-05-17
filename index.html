@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self';">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cat Gatekeeper</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>Cat Gatekeeper</h1>
+        <p id="statusLine">Stopped</p>
+      </div>
+      <div class="actions">
+        <button id="startButton" type="button">Start</button>
+        <button id="stopButton" type="button">Stop</button>
+        <button id="testButton" type="button">Test Overlay</button>
+        <button id="resetButton" type="button">Reset Timers</button>
+      </div>
+    </header>
+
+    <section class="settings">
+      <label>
+        Break minutes
+        <input id="breakMinutesInput" type="number" min="0" max="120" step="1">
+      </label>
+      <label>
+        Animal
+        <select id="animalSelect"></select>
+      </label>
+      <button id="saveButton" type="button">Save</button>
+      <div class="active-app">
+        <span>Active app</span>
+        <strong id="activeApp">unknown</strong>
+        <button id="useActiveButton" type="button">Add Active</button>
+      </div>
+    </section>
+
+    <section class="editor">
+      <label>
+        Process
+        <input id="processInput" type="text" placeholder="Google Chrome">
+      </label>
+      <label>
+        Limit
+        <input id="minutesInput" type="number" min="0" max="720" step="1" value="30">
+      </label>
+      <label>
+        Description
+        <input id="descriptionInput" type="text" placeholder="Browser time limit">
+      </label>
+      <button id="addButton" type="button">Add / Update</button>
+    </section>
+
+    <section class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Process</th>
+            <th>Limit</th>
+            <th>Used</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="appsBody"></tbody>
+      </table>
+    </section>
+
+    <section class="log-wrap">
+      <pre id="logOutput"></pre>
+    </section>
+  </main>
+  <script src="renderer.js"></script>
+</body>
+</html>

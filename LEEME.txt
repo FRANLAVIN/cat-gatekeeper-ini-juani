@@ -1,0 +1,17 @@
+Cat Gatekeeper - Ini/Juani M4
+
+Instalacion:
+1. Descomprime el zip.
+2. Arrastra "Cat Gatekeeper - Ini Juani.app" a Applications.
+3. Abre la app.
+
+Si macOS bloquea la primera apertura, usa click derecho > Open.
+
+Para que detecte la app activa:
+System Settings > Privacy & Security > Accessibility > enable Cat Gatekeeper.
+
+Incluye solo:
+- Iñi the Cat
+- Juani the Cat
+
+No incluye Nika/pantera.

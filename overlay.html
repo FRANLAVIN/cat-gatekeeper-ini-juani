@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; media-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
+  <title>Cat Gatekeeper Overlay</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: transparent;
+      user-select: none;
+    }
+
+    body {
+      opacity: 1;
+      transition: opacity 500ms ease;
+    }
+
+    #cat-gatekeeper-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483647;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      background: transparent;
+    }
+
+    video {
+      height: 100vh;
+      width: auto;
+      filter: drop-shadow(0 24px 28px rgba(0, 0, 0, 0.24));
+    }
+
+    body.animal-blue_cat video {
+      height: min(86vh, 900px);
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 22px 24px rgba(0, 0, 0, 0.34));
+    }
+
+    #walk {
+      animation: slide-in 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    }
+
+    body.animal-blue_cat #walk {
+      animation: none;
+    }
+
+    #sleep {
+      display: none;
+    }
+
+    #sleep.visible {
+      display: block;
+    }
+
+    @keyframes slide-in {
+      from { transform: translateX(100vw); }
+      to { transform: translateX(0); }
+    }
+
+    #countdown {
+      position: fixed;
+      top: 20vh;
+      left: 35vw;
+      transform: translateX(-50%);
+      padding: 48px 56px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.58);
+      color: rgba(255, 255, 255, 0.96);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+      font-size: clamp(80px, 9vw, 160px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: 0;
+      text-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    }
+  </style>
+</head>
+<body>
+  <div id="cat-gatekeeper-overlay">
+    <div id="countdown">0:00</div>
+    <video id="walk" autoplay muted playsinline preload="auto"></video>
+    <video id="sleep" muted playsinline preload="auto" loop></video>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    let seconds = Math.max(0, Number.parseInt(params.get('seconds') || '300', 10));
+    const animal = ['cat', 'blue_cat'].includes(params.get('animal')) ? params.get('animal') : 'blue_cat';
+    const countdown = document.getElementById('countdown');
+    const walk = document.getElementById('walk');
+    const sleep = document.getElementById('sleep');
+    const assetMap = {
+      cat: {
+        sequence: ['assets/neko1.webm'],
+        rest: ['assets/neko2.webm'],
+        audio: false
+      },
+      blue_cat: {
+        sequence: ['assets/blue_cat.webm'],
+        rest: ['assets/blue_cat.webm'],
+        audio: true
+      }
+    };
+
+    document.body.classList.add(`animal-${animal}`);
+    const selectedAssets = assetMap[animal];
+    let sequenceIndex = 0;
+    let restIndex = 0;
+    const playAudio = Boolean(selectedAssets.audio);
+    walk.muted = !playAudio;
+    sleep.muted = !playAudio;
+    walk.volume = playAudio ? 1 : 0;
+    sleep.volume = playAudio ? 1 : 0;
+
+    function renderCountdown() {
+      const minutes = Math.floor(seconds / 60);
+      const rest = seconds % 60;
+      countdown.textContent = `${minutes}:${String(rest).padStart(2, '0')}`;
+    }
+
+    function playVideo(video, source) {
+      if (video.getAttribute('src') !== source) {
+        video.src = source;
+        video.load();
+      }
+
+      const playback = video.play();
+      if (playback && typeof playback.catch === 'function') {
+        playback.catch(() => {});
+      }
+    }
+
+    function playSequence(index) {
+      if (index >= selectedAssets.sequence.length) {
+        showRest();
+        return;
+      }
+
+      sequenceIndex = index;
+      walk.style.display = 'block';
+      sleep.classList.remove('visible');
+      sleep.pause();
+      playVideo(walk, selectedAssets.sequence[sequenceIndex]);
+    }
+
+    function showRest() {
+      walk.style.display = 'none';
+      sleep.classList.add('visible');
+      playRest(0);
+    }
+
+    function playRest(index) {
+      if (index >= selectedAssets.rest.length) return;
+      restIndex = index;
+      playVideo(sleep, selectedAssets.rest[restIndex]);
+    }
+
+    walk.addEventListener('ended', () => playSequence(sequenceIndex + 1));
+    walk.addEventListener('error', () => playSequence(sequenceIndex + 1));
+    sleep.addEventListener('error', () => playRest(restIndex + 1));
+
+    renderCountdown();
+    playSequence(0);
+    const timer = setInterval(() => {
+      seconds -= 1;
+      renderCountdown();
+      if (seconds <= 0) {
+        clearInterval(timer);
+        document.body.style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('cat-gatekeeper-overlay').style.display = 'none';
+        }, 520);
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
