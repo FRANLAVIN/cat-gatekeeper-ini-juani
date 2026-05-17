@@ -43,7 +43,9 @@ jobs:
         run: |
           set -euo pipefail
           ls -lh out/*.tar.xz
+          ls -lh out/*.zip
           test -n "$(find out -maxdepth 1 -name '*.tar.xz' -print -quit)"
+          test -n "$(find out -maxdepth 1 -name '*.zip' -print -quit)"
 
       - name: Upload release asset
         env:
@@ -51,4 +53,4 @@ jobs:
           RELEASE_TAG: ${{ inputs.release_tag }}
         run: |
           set -euo pipefail
-          gh release upload "$RELEASE_TAG" out/*.tar.xz --repo "$GITHUB_REPOSITORY" --clobber
+          gh release upload "$RELEASE_TAG" out/*.tar.xz out/*.zip --repo "$GITHUB_REPOSITORY" --clobber
