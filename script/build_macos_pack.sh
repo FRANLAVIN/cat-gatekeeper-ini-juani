@@ -11,6 +11,7 @@ APP_NAME="Cat Gatekeeper - Ini Juani.app"
 APP_PATH="$PACK_DIR/$APP_NAME"
 ELECTRON_APP="$ROOT/node_modules/electron/dist/Electron.app"
 ZIP_PATH="$ROOT/out/CatGatekeeper_Ini_Juani_M4_$STAMP.zip"
+TAR_XZ_PATH="$ROOT/out/CatGatekeeper_Ini_Juani_M4_$STAMP.tar.xz"
 
 if [[ ! -d "$ELECTRON_APP" ]]; then
   printf 'Missing Electron runtime at %s\nRun npm install first.\n' "$ELECTRON_APP" >&2
@@ -60,8 +61,10 @@ codesign --verify --deep --strict --verbose=2 "$APP_PATH"
 (
   cd "$BUILD_ROOT"
   ditto -c -k --sequesterRsrc --keepParent "$PACK_NAME" "$ZIP_PATH"
+  tar -cJf "$TAR_XZ_PATH" "$PACK_NAME"
 )
 
 printf 'APP_PATH=%s\n' "$APP_PATH"
 printf 'PACK_DIR=%s\n' "$PACK_DIR"
 printf 'ZIP_PATH=%s\n' "$ZIP_PATH"
+printf 'TAR_XZ_PATH=%s\n' "$TAR_XZ_PATH"

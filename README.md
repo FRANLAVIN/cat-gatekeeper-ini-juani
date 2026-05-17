@@ -11,15 +11,15 @@ This fork is packaged as a small gift build for Apple Silicon Macs, especially M
 
 Use the latest file attached in [Releases](../../releases/latest).
 
-The release zip contains:
+The release archive contains:
 
 - `Cat Gatekeeper - Ini Juani.app`
 - `LEEME.txt`
 
 ## Install On macOS
 
-1. Download the latest release zip.
-2. Unzip it.
+1. Download the latest release archive.
+2. Extract it.
 3. Drag `Cat Gatekeeper - Ini Juani.app` into `Applications`.
 4. Open it.
 
@@ -51,7 +51,7 @@ npm install
 npm run build:mac
 ```
 
-The build script creates a signed local `.app` and a zip under `out/`.
+The build script creates a signed local `.app`, a `.zip`, and a smaller `.tar.xz` under `out/`.
 
 ## Notes
 
